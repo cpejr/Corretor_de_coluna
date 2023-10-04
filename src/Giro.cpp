@@ -1,7 +1,7 @@
 #include "Giro.hpp"
 #include "AutoWire.hpp"
 
-Giro::Giro(int port) : pino(port){
+Giro::Giro(int port) : pino(port){        // Constructor
 
     pinMode(port,OUTPUT);                 // Define a porta conectada ao ADD0 do MPU-6050 como saída
 
@@ -9,15 +9,16 @@ Giro::Giro(int port) : pino(port){
 
 float Giro::getAnglePhi(){
 
-  digitalWrite(pino,HIGH);                // Coloca a porta ADD0 do MPU-5060 em HIGH. Isso muda o endereço do dispositivo de 0x68 para 0x69.
-                                          // Esse passo é necessário porque não é possível ler dados com vários MPU-6050 no mesmo barramento (eles possuem o mesmo endereço)
-                                          // Então muda-se o endereço apenas do que vai ser lido antes da aquisição de dados e volta para o endereço padrão ao terminar
+  digitalWrite(pino,HIGH);                /* Coloca a porta ADD0 do MPU-5060 em HIGH. Isso muda o endereço do dispositivo de 0x68 para 0x69.
+                                             Esse passo é necessário porque não é possível ler dados com vários MPU-6050 no mesmo barramento (eles possuem o mesmo endereço)
+                                             Então muda-se o endereço apenas do que vai ser lido antes da aquisição de dados e volta para o endereço padrão ao terminar */
 
   autowire sensor(HighAddr);              // Cria um objeto para a aquisição de dados
 
-  AnglePhi = (360*(atan((sqrt((pow(sensor.getAx(),2)+(pow(sensor.getAy(),2))))/sensor.getAz()))))/(2*PI);     // Calcula um dos ângulos que definem o posicionamento
-                                                                                                              // tridimensional do dispositivo com base em informações
-                                                                                                              // adquiridas pelo acelerômetro
+  AnglePhi = (360*(atan((sqrt((pow(sensor.getAx(),2)+(pow(sensor.getAy(),2))))/sensor.getAz()))))/(2*PI);     /* Calcula Phi, um dos ângulos que definem o posicionamento
+                                                                                                                 tridimensional do dispositivo com base em informações
+                                                                                                                 adquiridas pelo acelerômetro */
+
   digitalWrite(pino,LOW);                // Volta a porta ADD0 do MPU-6050 para LOW e, consequentemente, o endereço para 0x68
   return AnglePhi;
 }

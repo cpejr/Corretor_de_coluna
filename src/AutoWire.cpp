@@ -1,13 +1,13 @@
 #include"AutoWire.hpp"
 #include "Wire.h"
 
-autowire::autowire(const int address) : addr(address){};
+autowire::autowire(const int address) : addr(address){};    //Constructor
 
 void autowire::updateData(){
 
     Wire.begin();
     Wire.beginTransmission(addr);                     // Inicia a transissão para o I2C slave com o endereço especificado
-    Wire.write(0x6B);                                 // PWR_MGMT_1 register
+    Wire.write(0x6B);                                 // PWR_MGMT_1 register (power management)
     Wire.write(0);                                    // Setar para zero "acorda" o MPU-6050
     Wire.endTransmission(true);
     Wire.beginTransmission(addr);
