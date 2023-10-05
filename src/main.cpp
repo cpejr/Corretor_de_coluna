@@ -27,6 +27,8 @@ void loop() {
 /* As linhas comentadas a seguir printam os ângulos calculados a partir dos dados do acelerômetro
    foram comentadas para facilitar a leitura das comparações no monitor serial */
 
+
+//   delay(2000);
 //   Serial.print("Giro1: ");
 //   Giroscopio.printAngles();
 //   Giroscopio.printTemperature();
@@ -66,5 +68,16 @@ void loop() {
   if(DPsi>TolTimes){
     Serial.println("desalinhamento em Psi");
     DPsi=0;
+  }
+
+// O reseter serve pra evitar que acumulos esporádicos que ocorram nas variáveis de desalinhamento gerem avisos aleatórios para o usuário
+
+  int reseter;
+  reseter++;
+  if(reseter>=200){
+    reseter =0;
+    DPhi = 0;
+    DTheta = 0;
+    DPsi = 0;
   }
 }
