@@ -1,14 +1,14 @@
-#ifndef GIRO
-#define GIRO
+#ifndef MPU_
+#define MPU_
 
 #include <Arduino.h>
 #include "Wire.h"
 #include <math.h>
 
-class Giro
+class MPU
     {
         public:
-        Giro(int port);
+        MPU(int port, int offset_Phi, int offset_Theta, int offset_Psi);
 
         float getAnglePhi();
         float getAngleTheta();
@@ -21,6 +21,9 @@ class Giro
         private:
 
         int pino;
+        int offsetPhi;
+        int offsetTheta;
+        int offsetPsi;
 
         const int HighAddr = 0x69;
 

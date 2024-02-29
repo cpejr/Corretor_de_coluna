@@ -1,13 +1,13 @@
-#include "Giro.hpp"
+#include "MPU.hpp"
 #include "AutoWire.hpp"
 
-Giro::Giro(int port) : pino(port){        // Constructor
+MPU::MPU(int port,int offset_Phi, int offset_Theta, int offset_Psi) : pino(port),offsetPhi(offset_Phi),offsetTheta(offset_Theta),offsetPsi(offset_Psi){        // Constructor
 
     pinMode(port,OUTPUT);                 // Define a porta conectada ao ADD0 do MPU-6050 como saída
 
 }
 
-float Giro::getAnglePhi(){
+float MPU::getAnglePhi(){
 
   digitalWrite(pino,HIGH);                /* Coloca a porta ADD0 do MPU-5060 em HIGH. Isso muda o endereço do dispositivo de 0x68 para 0x69.
                                              Esse passo é necessário porque não é possível ler dados com vários MPU-6050 no mesmo barramento (eles possuem o mesmo endereço)
@@ -15,7 +15,7 @@ float Giro::getAnglePhi(){
 
   autowire sensor(HighAddr);              // Cria um objeto para a aquisição de dados
 
-  AnglePhi = (360*(atan((sqrt((pow(sensor.getAx(),2)+(pow(sensor.getAy(),2))))/sensor.getAz()))))/(2*PI);     /* Calcula Phi, um dos ângulos que definem o posicionamento
+  AnglePhi = (((360*(atan((sqrt((pow(sensor.getAx(),2)+(pow(sensor.getAy(),2))))/sensor.getAz()))))/(2*PI))+offsetPhi);     /* Calcula Phi, um dos ângulos que definem o posicionamento
                                                                                                                  tridimensional do dispositivo com base em informações
                                                                                                                  adquiridas pelo acelerômetro */
 
@@ -25,31 +25,31 @@ float Giro::getAnglePhi(){
 
 // As próximas funções repetem o mesmo comportamento da anterior
 
-float Giro::getAngleTheta(){
+float MPU::getAngleTheta(){
 
   digitalWrite(pino,HIGH);
 
   autowire sensor(HighAddr);
 
-  AngleTheta = (360*(atan((sensor.getAx())/sqrt(pow(sensor.getAy(),2)+pow(sensor.getAz(),2))))/(2*PI));;
+  AngleTheta = ((360*(atan((sensor.getAx())/sqrt(pow(sensor.getAy(),2)+pow(sensor.getAz(),2))))/(2*PI))+offsetTheta);;
 
   digitalWrite(pino,LOW); 
   return AngleTheta;
 }
 
-float Giro::getAnglePsi(){
+float MPU::getAnglePsi(){
 
   digitalWrite(pino,HIGH);
 
   autowire sensor(HighAddr);
 
-  AnglePsi = (360*(atan((sensor.getAy())/sqrt(pow(sensor.getAx(),2)+pow(sensor.getAz(),2))))/(2*PI));;
+  AnglePsi = ((360*(atan((sensor.getAy())/sqrt(pow(sensor.getAx(),2)+pow(sensor.getAz(),2))))/(2*PI))+offsetPsi);;
 
   digitalWrite(pino,LOW); 
   return AnglePsi;
 }
 
-float Giro::getTemperature(){
+float MPU::getTemperature(){
 
   digitalWrite(pino,HIGH);
 
@@ -63,8 +63,7 @@ float Giro::getTemperature(){
 // As duas funções a seguir servem apenas para printar, no monitor serial, o ângulos calculados e a temperatura, obtidos
 // a partir das funções anteriores
 
-void Giro::printAngles(){
-
+void MPU::printAngles(){
   Serial.print(" | Ângulo Φ: "); Serial.print(this->getAnglePhi());Serial.print("°");
   Serial.print(" | Ângulo 𝛙: "); Serial.print(this->getAnglePsi());Serial.print("°");
   Serial.print(" | Ângulo θ: "); Serial.print(this->getAngleTheta());Serial.print("°");
@@ -72,7 +71,7 @@ void Giro::printAngles(){
 
 }
 
-void Giro::printTemperature(){
+void MPU::printTemperature(){
 
   Serial.print("Temperatura: "); Serial.print(this->getTemperature()); Serial.println(" °C");
 
