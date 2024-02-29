@@ -3,7 +3,7 @@
 
 #include <Arduino.h>
 #include "Wire.h"
-#include <cmath>
+#include <math.h>
 
 class autowire
 {

@@ -1,8 +1,15 @@
 #include <Arduino.h>
 #include "Giro.hpp"
+#define Right 9
+#define Left 8
+#define Bottom 7
 
-Giro Giroscopio(17);            // Define um objeto para um dispositivo MPU-6050 com AD0 na porta 17
-Giro Giroscopio2(18);           // Define um objeto para um dispositivo MPU-6050 com AD0 na porta 18
+
+Giro Referencia(3);            // Define um objeto para um dispositivo MPU-6050 com AD0 na porta 3
+Giro GiroscopioE(2);           // Define um objeto para um dispositivo MPU-6050 com AD0 na porta 18
+Giro GiroscopioR(0);           // Define um objeto para um dispositivo MPU-6050 com AD0 na porta 18
+Giro GiroscopioB(5);           // Define um objeto para um dispositivo MPU-6050 com AD0 na porta 18
+
 
 int DPhi, DTheta, DPsi;         // Essas variáveis armazenam quantas vezes os ângulos desviaram. 
                                 /* A ideia por trás disso é indicar um desvio de postura somente quando a diferença entre ângulos é detectada 
@@ -18,6 +25,9 @@ int TolGrad = 30;               // [Tolerância de ângulo] Define, em graus, a 
 void setup() {
 
   Serial.begin(115200); 
+  pinMode(9, OUTPUT);
+  pinMode(8, OUTPUT);
+  pinMode(7, OUTPUT);
   
 }
 
@@ -28,29 +38,36 @@ void loop() {
    foram comentadas para facilitar a leitura das comparações no monitor serial */
 
 
-//   delay(2000);
-//   Serial.print("Giro1: ");
-//   Giroscopio.printAngles();
-//   Giroscopio.printTemperature();
-//   Serial.println();
-// // 
-//   Serial.print("Giro2: ");
-//   Giroscopio2.printAngles();
-//   Giroscopio2.printTemperature();
-//   Serial.println();
+  delay(3000);
+  Serial.print("Referencia: ");
+  Referencia.printAngles();
+  Referencia.printTemperature();
+  Serial.print("GiroE: ");
+  GiroscopioE.printAngles();
+  GiroscopioE.printTemperature();
+  Serial.print("GiroR: ");
+  GiroscopioR.printAngles();
+  GiroscopioR.printTemperature();
+  Serial.print("GiroB: ");
+  GiroscopioB.printAngles();
+  GiroscopioB.printTemperature();
+  digitalWrite(Bottom,HIGH);
+  delay(1000);
+  digitalWrite(Bottom, LOW);
+  Serial.println();
 
 
 
 /* As funções a seguir fazer a comparação entre os ângulos dos diferentes acelerômetros, considerando a tolerância de ângulo
    e armazenam o número de vezes que ocorrem diferenças */
 
-  if (((Giroscopio.getAnglePhi())>((Giroscopio2.getAnglePhi())+TolGrad)) || ((Giroscopio.getAnglePhi())<((Giroscopio2.getAnglePhi())-TolGrad))){
+  if (((Referencia.getAnglePhi())>((GiroscopioE.getAnglePhi())+TolGrad)) || ((GiroscopioE.getAnglePhi())<((GiroscopioE.getAnglePhi())-TolGrad))){
     DPhi++;
   }
-  if (((Giroscopio.getAngleTheta())>((Giroscopio2.getAngleTheta())+TolGrad)) || ((Giroscopio.getAngleTheta())<((Giroscopio2.getAngleTheta())-TolGrad))){
+  if (((Referencia.getAngleTheta())>((GiroscopioE.getAngleTheta())+TolGrad)) || ((Referencia.getAngleTheta())<((GiroscopioE.getAngleTheta())-TolGrad))){
     DTheta++;
   }
-  if (((Giroscopio.getAnglePsi())>((Giroscopio2.getAnglePsi())+TolGrad)) || ((Giroscopio.getAnglePsi())<((Giroscopio2.getAnglePsi())-TolGrad))){
+  if (((Referencia.getAnglePsi())>((GiroscopioE.getAnglePsi())+TolGrad)) || ((Referencia.getAnglePsi())<((GiroscopioE.getAnglePsi())-TolGrad))){
     DPsi++;
   }
 
