@@ -1,15 +1,16 @@
 #include <Arduino.h>
+
 #include "Giro.hpp"
-#define Right 9
-#define Left 8
-#define Bottom 7
+
+#define RIGHT 9
+#define LEFT 8
+#define BOTTOM 7
 
 
 Giro Referencia(3);            // Define um objeto para um dispositivo MPU-6050 com AD0 na porta 3
 Giro GiroscopioE(2);           // Define um objeto para um dispositivo MPU-6050 com AD0 na porta 18
 Giro GiroscopioR(0);           // Define um objeto para um dispositivo MPU-6050 com AD0 na porta 18
 Giro GiroscopioB(5);           // Define um objeto para um dispositivo MPU-6050 com AD0 na porta 18
-
 
 int DPhi, DTheta, DPsi;         // Essas variáveis armazenam quantas vezes os ângulos desviaram. 
                                 /* A ideia por trás disso é indicar um desvio de postura somente quando a diferença entre ângulos é detectada 
@@ -18,9 +19,11 @@ int DPhi, DTheta, DPsi;         // Essas variáveis armazenam quantas vezes os �
 
 int TolTimes = 20;              // [Tolerância de tempo] Define o número de vezes que o dispositivo precisa detectar diferenças entre os ângulos antes de reportar um desalinhamento
                                    
-
 int TolGrad = 30;               // [Tolerância de ângulo] Define, em graus, a tolerância de desalinhamento entre os ângulos dos diferentes acelerômetros
-                                   
+
+
+// O reseter serve pra evitar que acumulos esporádicos que ocorram nas variáveis de desalinhamento gerem avisos aleatórios para o usuário
+int reseter = 0;
 
 void setup() {
 
@@ -38,23 +41,23 @@ void loop() {
    foram comentadas para facilitar a leitura das comparações no monitor serial */
 
 
-  delay(3000);
-  Serial.print("Referencia: ");
-  Referencia.printAngles();
-  Referencia.printTemperature();
-  Serial.print("GiroE: ");
-  GiroscopioE.printAngles();
-  GiroscopioE.printTemperature();
-  Serial.print("GiroR: ");
-  GiroscopioR.printAngles();
-  GiroscopioR.printTemperature();
-  Serial.print("GiroB: ");
-  GiroscopioB.printAngles();
-  GiroscopioB.printTemperature();
-  digitalWrite(Bottom,HIGH);
-  delay(1000);
-  digitalWrite(Bottom, LOW);
-  Serial.println();
+  // delay(3000);
+  // Serial.print("Referencia: ");
+  // Referencia.printAngles();
+  // Referencia.printTemperature();
+  // Serial.print("GiroE: ");
+  // GiroscopioE.printAngles();
+  // GiroscopioE.printTemperature();
+  // Serial.print("GiroR: ");
+  // GiroscopioR.printAngles();
+  // GiroscopioR.printTemperature();
+  // Serial.print("GiroB: ");
+  // GiroscopioB.printAngles();
+  // GiroscopioB.printTemperature();
+  // digitalWrite(BOTTOM,HIGH);
+  // delay(1000);
+  // digitalWrite(BOTTOM, LOW);
+  // Serial.println();
 
 
 
@@ -87,9 +90,6 @@ void loop() {
     DPsi=0;
   }
 
-// O reseter serve pra evitar que acumulos esporádicos que ocorram nas variáveis de desalinhamento gerem avisos aleatórios para o usuário
-
-  int reseter;
   reseter++;
   if(reseter>=200){
     reseter =0;
