@@ -1,26 +1,37 @@
 #include <Arduino.h>
-#include "Giro.hpp"
-#define Right 9
-#define Left 8
-#define Bottom 7
+#include <Timer.h>
+#include "Compare.hpp"
+#include "MPU.hpp"
+
+#define RIGHT 9
+#define LEFT 8
+#define BOTTOM 7
 
 
-Giro Referencia(3);            // Define um objeto para um dispositivo MPU-6050 com AD0 na porta 3
-Giro GiroscopioE(2);           // Define um objeto para um dispositivo MPU-6050 com AD0 na porta 18
-Giro GiroscopioR(0);           // Define um objeto para um dispositivo MPU-6050 com AD0 na porta 18
-Giro GiroscopioB(5);           // Define um objeto para um dispositivo MPU-6050 com AD0 na porta 18
+MPU Referencia(3,-53,-53,0);            // Define um objeto para um dispositivo MPU-6050 com AD0 na porta 3
+MPU MPU_L(2,35,-4,35);           // Define um objeto para um dispositivo MPU-6050 com AD0 na porta 2
+MPU MPU_R(4,36,-26,-15);           // Define um objeto para um dispositivo MPU-6050 com AD0 na porta 0
+MPU MPU_B(5,85,82,5);           // Define um objeto para um dispositivo MPU-6050 com AD0 na porta 5
 
+const int TolTimes = 5;              // [Tolerância de tempo] Define o número de vezes que o dispositivo precisa detectar diferenças entre os ângulos antes de reportar um desalinhamento                                  
+const int TolGrad = 25;               // [Tolerância de ângulo] Define, em graus, a tolerância de desalinhamento entre os ângulos dos diferentes acelerômetros
 
-int DPhi, DTheta, DPsi;         // Essas variáveis armazenam quantas vezes os ângulos desviaram. 
-                                /* A ideia por trás disso é indicar um desvio de postura somente quando a diferença entre ângulos é detectada 
-                                   e permanece ocorrendo dentro de um certo período de tempo. A taxa de aquisição de dados do acelerômetro
-                                   multiplicada pela tolerância de tempo resulta no tempo necessário pra indicar desalinhamento. */
+// O reseter serve pra evitar que acumulos esporádicos que ocorram nas variáveis de desalinhamento gerem avisos aleatórios para o usuário
+int reseter = 0;
 
-int TolTimes = 20;              // [Tolerância de tempo] Define o número de vezes que o dispositivo precisa detectar diferenças entre os ângulos antes de reportar um desalinhamento
-                                   
+// Variavel que define o tempo de vibração dos motores em millisegundos
+const int MOTOR_DELAY = 300;
+const int RESET_TIME = 5000;
 
-int TolGrad = 30;               // [Tolerância de ângulo] Define, em graus, a tolerância de desalinhamento entre os ângulos dos diferentes acelerômetros
-                                   
+// Cada Timer é relativo a um motor de vibração
+Timer timerL;
+Timer timerR;
+Timer timerB;
+Timer ResetTimer;
+
+Compare RightC(Referencia,MPU_R,TolTimes,TolGrad);
+Compare LeftC(Referencia,MPU_L,TolTimes,TolGrad);
+Compare BottomC(Referencia,MPU_B,TolTimes,TolGrad);
 
 void setup() {
 
@@ -28,73 +39,65 @@ void setup() {
   pinMode(9, OUTPUT);
   pinMode(8, OUTPUT);
   pinMode(7, OUTPUT);
-  
+  // ResetTimer.start();
 }
 
 void loop() {
 
+  if(RightC.unaligned()){
+    digitalWrite(RIGHT, HIGH);
+    // Serial.println("Desalinhamento no lado direito");
+    timerR.start();
+  }
 
-/* As linhas comentadas a seguir printam os ângulos calculados a partir dos dados do acelerômetro
-   foram comentadas para facilitar a leitura das comparações no monitor serial */
+  if(LeftC.unaligned()){
+    digitalWrite(LEFT, HIGH);
+    // Serial.println("Desalinhamento no lado esquerdo");
+    timerL.start();
+  }
 
+  if(BottomC.unaligned()){
+    digitalWrite(BOTTOM, HIGH);
+    // Serial.println("Desalinhamento embaixo");
+    timerB.start();
+  }
 
-  delay(3000);
-  Serial.print("Referencia: ");
+  // Os motores sao desligados quando os timers ultrapassam o tempo definido e os timers sao resetados
+  if (timerL.read() > MOTOR_DELAY)
+  {
+    digitalWrite(LEFT, LOW);
+    timerL.start();
+    timerL.pause();
+  }
+  if (timerR.read() > MOTOR_DELAY)
+  {
+    digitalWrite(RIGHT, LOW);
+    timerR.start();
+    timerR.pause();
+  }
+  if (timerB.read() > MOTOR_DELAY)
+  {
+    digitalWrite(BOTTOM, LOW);
+    timerB.start();
+    timerB.pause();
+  }
+  // if (ResetTimer.read() > RESET_TIME)
+  // {
+  //   RightC.reseter();
+  //   LeftC.reseter();
+  //   BottomC.reseter();
+
+  //   ResetTimer.start();
+  //   Serial.println("Reset");
+  // }
+  // delay(2000);
+  Serial.println("Referencia:");
   Referencia.printAngles();
-  Referencia.printTemperature();
-  Serial.print("GiroE: ");
-  GiroscopioE.printAngles();
-  GiroscopioE.printTemperature();
-  Serial.print("GiroR: ");
-  GiroscopioR.printAngles();
-  GiroscopioR.printTemperature();
-  Serial.print("GiroB: ");
-  GiroscopioB.printAngles();
-  GiroscopioB.printTemperature();
-  digitalWrite(Bottom,HIGH);
-  delay(1000);
-  digitalWrite(Bottom, LOW);
-  Serial.println();
+Serial.println("Left");
+MPU_L.printAngles();
+Serial.println("Right");
+MPU_R.printAngles(); 
+Serial.println("Bottom"); 
+MPU_B.printAngles();
 
-
-
-/* As funções a seguir fazer a comparação entre os ângulos dos diferentes acelerômetros, considerando a tolerância de ângulo
-   e armazenam o número de vezes que ocorrem diferenças */
-
-  if (((Referencia.getAnglePhi())>((GiroscopioE.getAnglePhi())+TolGrad)) || ((GiroscopioE.getAnglePhi())<((GiroscopioE.getAnglePhi())-TolGrad))){
-    DPhi++;
-  }
-  if (((Referencia.getAngleTheta())>((GiroscopioE.getAngleTheta())+TolGrad)) || ((Referencia.getAngleTheta())<((GiroscopioE.getAngleTheta())-TolGrad))){
-    DTheta++;
-  }
-  if (((Referencia.getAnglePsi())>((GiroscopioE.getAnglePsi())+TolGrad)) || ((Referencia.getAnglePsi())<((GiroscopioE.getAnglePsi())-TolGrad))){
-    DPsi++;
-  }
-
-  /* As próximas funções indicam desalinhamento quando o número de vezes que ocorrem diferenças de ângulos ultrapassa uma certa tolerância.
-     A variável que conta o número de vezes que ocorrem desalinhamentos é zerada logo que um desalinhamento é notificado */
-
-  if(DPhi>TolTimes){
-    Serial.println("desalinhamento em Phi");
-    DPhi=0;
-  }
-  if(DTheta>TolTimes){
-    Serial.println("desalinhamento em Theta");
-    DTheta=0;
-  }
-  if(DPsi>TolTimes){
-    Serial.println("desalinhamento em Psi");
-    DPsi=0;
-  }
-
-// O reseter serve pra evitar que acumulos esporádicos que ocorram nas variáveis de desalinhamento gerem avisos aleatórios para o usuário
-
-  int reseter;
-  reseter++;
-  if(reseter>=200){
-    reseter =0;
-    DPhi = 0;
-    DTheta = 0;
-    DPsi = 0;
-  }
 }
