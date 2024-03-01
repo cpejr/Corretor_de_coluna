@@ -6,6 +6,7 @@
 #define RIGHT 9
 #define LEFT 8
 #define BOTTOM 7
+#define CALIBRATE_BUTTON 12
 
 
 MPU Referencia(3,-53,-53,0);            // Define um objeto para um dispositivo MPU-6050 com AD0 na porta 3
@@ -43,6 +44,14 @@ void setup() {
 }
 
 void loop() {
+
+  if (!digitalRead(CALIBRATE_BUTTON))
+  {
+    Referencia.auto_offset();
+    MPU_L.auto_offset();
+    MPU_R.auto_offset();
+    MPU_B.auto_offset();
+  }
 
   if(RightC.unaligned()){
     digitalWrite(RIGHT, HIGH);

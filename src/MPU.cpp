@@ -76,3 +76,9 @@ void MPU::printTemperature(){
   Serial.print("Temperatura: "); Serial.print(this->getTemperature()); Serial.println(" °C");
 
 }
+
+void MPU::auto_offset(){
+  offsetPhi = (this->getAnglePhi() == 0) ? offsetPhi : (this->getAnglePhi())*(-1);
+  offsetTheta = (this->getAngleTheta() == 0) ? offsetTheta : (this->getAngleTheta())*(-1);
+  offsetPsi = (this->getAnglePsi() == 0) ? offsetPsi : (this->getAnglePsi())*(-1);
+}

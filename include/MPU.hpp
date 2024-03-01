@@ -17,6 +17,7 @@ class MPU
 
         void printAngles();
         void printTemperature();
+        void auto_offset();
 
         private:
 
