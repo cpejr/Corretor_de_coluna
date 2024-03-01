@@ -47,7 +47,7 @@ void setup() {
 
 void loop() {
   // Parte do código responsável por calibrar os acelerometros ao apertar o botão
-  if (digitalRead(CALIBRATE_BUTTON))
+  if (!digitalRead(CALIBRATE_BUTTON))
   {
     RightC.calibrate();
     LeftC.calibrate();
@@ -101,7 +101,7 @@ void loop() {
   //   Serial.println("Reset");
   // }
   // delay(2000);
-  Serial.println("Referencia:");
+  /*Serial.println("Referencia:");
   Referencia.printAngles();
   Serial.println("Left");
   MPU_L.printAngles();
@@ -109,4 +109,4 @@ void loop() {
   MPU_R.printAngles(); 
   Serial.println("Bottom"); 
   MPU_B.printAngles();
-}
+*/}
