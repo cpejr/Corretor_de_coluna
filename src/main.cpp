@@ -7,6 +7,7 @@
 #define LEFT 8
 #define BOTTOM 7
 
+#define CALIBRATE_BUTTON 12
 
 MPU Referencia(3,-53,-53,0);            // Define um objeto para um dispositivo MPU-6050 com AD0 na porta 3
 MPU MPU_L(2,35,-4,35);           // Define um objeto para um dispositivo MPU-6050 com AD0 na porta 2
@@ -36,27 +37,36 @@ Compare BottomC(Referencia,MPU_B,TolTimes,TolGrad);
 void setup() {
 
   Serial.begin(115200); 
-  pinMode(9, OUTPUT);
-  pinMode(8, OUTPUT);
-  pinMode(7, OUTPUT);
+  pinMode(LEFT, OUTPUT);
+  pinMode(RIGHT, OUTPUT);
+  pinMode(BOTTOM, OUTPUT);
+
+  pinMode(CALIBRATE_BUTTON, INPUT_PULLUP);
   // ResetTimer.start();
 }
 
 void loop() {
+  // Parte do código responsável por calibrar os acelerometros ao apertar o botão
+  if (digitalRead(CALIBRATE_BUTTON))
+  {
+    RightC.calibrate();
+    LeftC.calibrate();
+    BottomC.calibrate();
+  }
 
-  if(RightC.unaligned()){
+  if(RightC.misaligned()){
     digitalWrite(RIGHT, HIGH);
     // Serial.println("Desalinhamento no lado direito");
     timerR.start();
   }
 
-  if(LeftC.unaligned()){
+  if(LeftC.misaligned()){
     digitalWrite(LEFT, HIGH);
     // Serial.println("Desalinhamento no lado esquerdo");
     timerL.start();
   }
 
-  if(BottomC.unaligned()){
+  if(BottomC.misaligned()){
     digitalWrite(BOTTOM, HIGH);
     // Serial.println("Desalinhamento embaixo");
     timerB.start();

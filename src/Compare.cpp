@@ -7,16 +7,23 @@ Compare::Compare(MPU& Ref_,
   Ref(Ref_),
   Point(Point_),
   ToleranceTimes(ToleranceTimes_),
-  ToleranceAngle(ToleranceAngle_){}
+  ToleranceAngle(ToleranceAngle_),
+  referencePhi(0),
+  referenceTheta(0),
+  referencePsi(0) {}
 
-bool Compare::unaligned(){
-    if (((Ref.getAnglePhi())>((Point.getAnglePhi())+ToleranceAngle)) || ((Ref.getAnglePhi())<((Point.getAnglePhi())-ToleranceAngle))){
+bool Compare::misaligned(){
+  int currentPhi = Point.getAnglePhi() - Ref.getAnglePhi();
+  int currentTheta = Point.getAngleTheta() - Ref.getAngleTheta();
+  int currentPsi = Point.getAnglePsi() - Ref.getAnglePsi();
+
+  if ((currentPhi - referenceTheta) > ToleranceAngle || (currentPhi - referenceTheta) < ToleranceAngle){
     DPhi++;
   }
-  if (((Ref.getAngleTheta())>((Point.getAngleTheta())+ToleranceAngle)) || ((Ref.getAngleTheta())<((Point.getAngleTheta())-ToleranceAngle))){
+  if ((currentTheta - referenceTheta) > ToleranceAngle || (currentTheta - referenceTheta) < ToleranceAngle){
     DTheta++;
   }
-  if (((Ref.getAnglePsi())>((Point.getAnglePsi())+ToleranceAngle)) || ((Ref.getAnglePsi())<((Point.getAnglePsi())-ToleranceAngle))){
+  if ((currentPsi - referenceTheta) > ToleranceAngle || (currentPsi - referenceTheta) < ToleranceAngle){
     DPsi++;
   }
 
@@ -25,7 +32,7 @@ bool Compare::unaligned(){
     DTheta = 0;
     DPsi = 0;
     return 1;
-  } else { return 0;};
+  } else { return 0;}
 }
 
 void Compare::reseter(){
@@ -34,3 +41,9 @@ void Compare::reseter(){
     DPsi = 0;
 }
 
+void Compare::calibrate()
+{
+  referencePhi = Point.getAnglePhi() - Ref.getAnglePhi();
+  referenceTheta = Point.getAngleTheta() - Ref.getAngleTheta();
+  referencePsi = Point.getAnglePsi() - Ref.getAnglePsi();
+}

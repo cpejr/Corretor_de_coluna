@@ -204,10 +204,16 @@
         "output": ".pio/build/esp32dev/src/AutoWire.cpp.o"
     },
     {
-        "command": "/home/theofc/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/esp32dev/src/Giro.cpp.o -c -fno-exceptions -fno-threadsafe-statics -fpermissive -std=gnu++11 -mmcu=atmega328p -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60114 -DARDUINO_AVR_LILYPAD -DF_CPU=8000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -Iinclude -Isrc -I.pio/libdeps/esp32dev/Timer -I.pio/libdeps/esp32dev/MPU6050/src -I/home/theofc/.platformio/packages/framework-arduino-avr/libraries/Wire/src -I/home/theofc/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/theofc/.platformio/packages/framework-arduino-avr/variants/standard src/Giro.cpp",
+        "command": "/home/theofc/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/esp32dev/src/Compare.cpp.o -c -fno-exceptions -fno-threadsafe-statics -fpermissive -std=gnu++11 -mmcu=atmega328p -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60114 -DARDUINO_AVR_LILYPAD -DF_CPU=8000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -Iinclude -Isrc -I.pio/libdeps/esp32dev/Timer -I.pio/libdeps/esp32dev/MPU6050/src -I/home/theofc/.platformio/packages/framework-arduino-avr/libraries/Wire/src -I/home/theofc/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/theofc/.platformio/packages/framework-arduino-avr/variants/standard src/Compare.cpp",
         "directory": "/home/theofc/Documents/cpejr/projects/Corretor de Coluna/Corretor_de_coluna",
-        "file": "src/Giro.cpp",
-        "output": ".pio/build/esp32dev/src/Giro.cpp.o"
+        "file": "src/Compare.cpp",
+        "output": ".pio/build/esp32dev/src/Compare.cpp.o"
+    },
+    {
+        "command": "/home/theofc/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/esp32dev/src/MPU.cpp.o -c -fno-exceptions -fno-threadsafe-statics -fpermissive -std=gnu++11 -mmcu=atmega328p -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60114 -DARDUINO_AVR_LILYPAD -DF_CPU=8000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -Iinclude -Isrc -I.pio/libdeps/esp32dev/Timer -I.pio/libdeps/esp32dev/MPU6050/src -I/home/theofc/.platformio/packages/framework-arduino-avr/libraries/Wire/src -I/home/theofc/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/theofc/.platformio/packages/framework-arduino-avr/variants/standard src/MPU.cpp",
+        "directory": "/home/theofc/Documents/cpejr/projects/Corretor de Coluna/Corretor_de_coluna",
+        "file": "src/MPU.cpp",
+        "output": ".pio/build/esp32dev/src/MPU.cpp.o"
     },
     {
         "command": "/home/theofc/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/esp32dev/src/main.cpp.o -c -fno-exceptions -fno-threadsafe-statics -fpermissive -std=gnu++11 -mmcu=atmega328p -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60114 -DARDUINO_AVR_LILYPAD -DF_CPU=8000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -Iinclude -Isrc -I.pio/libdeps/esp32dev/Timer -I.pio/libdeps/esp32dev/MPU6050/src -I/home/theofc/.platformio/packages/framework-arduino-avr/libraries/Wire/src -I/home/theofc/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/theofc/.platformio/packages/framework-arduino-avr/variants/standard src/main.cpp",
