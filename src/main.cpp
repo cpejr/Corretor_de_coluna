@@ -93,11 +93,10 @@ void loop() {
   // delay(2000);
   Serial.println("Referencia:");
   Referencia.printAngles();
-Serial.println("Left");
-MPU_L.printAngles();
-Serial.println("Right");
-MPU_R.printAngles(); 
-Serial.println("Bottom"); 
-MPU_B.printAngles();
-
+  Serial.println("Left");
+  MPU_L.printAngles();
+  Serial.println("Right");
+  MPU_R.printAngles(); 
+  Serial.println("Bottom"); 
+  MPU_B.printAngles();
 }

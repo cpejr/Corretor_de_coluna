@@ -1,6 +1,13 @@
 #include "Compare.hpp"
 
-Compare::Compare(MPU& Ref_, MPU& Point_,int ToleranceTimes_, int ToleranceAngle_):Point(Point_),Ref(Ref_),ToleranceTimes(ToleranceTimes_),ToleranceAngle(ToleranceAngle_){}
+Compare::Compare(MPU& Ref_,
+                 MPU& Point_,
+                 int ToleranceTimes_,
+                 int ToleranceAngle_):
+  Ref(Ref_),
+  Point(Point_),
+  ToleranceTimes(ToleranceTimes_),
+  ToleranceAngle(ToleranceAngle_){}
 
 bool Compare::unaligned(){
     if (((Ref.getAnglePhi())>((Point.getAnglePhi())+ToleranceAngle)) || ((Ref.getAnglePhi())<((Point.getAnglePhi())-ToleranceAngle))){

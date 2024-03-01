@@ -5,17 +5,18 @@
 #include "MPU.hpp"
 
 class Compare
-
 {
-    public:
-        Compare(MPU& Ref, MPU& Point,int ToleranceTimes_, int ToleranceAngle_);
-        bool unaligned();
-        void reseter();
-        int DPhi, DTheta, DPsi;
-        int ToleranceTimes;
-        int ToleranceAngle;
-        MPU& Ref;
-        MPU& Point;
+  public:
+    Compare(MPU& Ref, MPU& Point, int ToleranceTimes_, int ToleranceAngle_);
+    bool unaligned();
+    void reseter();
+
+    MPU& Ref;
+    MPU& Point;
+
+    int DPhi, DTheta, DPsi;
+    int ToleranceTimes;
+    int ToleranceAngle;
 };
 
 #endif
