@@ -100,8 +100,9 @@ void loop() {
   //   Serial.println("Reset");
   // }
   // delay(2000);
-  Serial.println("Referencia:");
-  Referencia.printAngles();
+
+Serial.println("Referencia:");
+Referencia.printAngles();
 Serial.println("Left");
 MPU_L.printAngles();
 Serial.println("Right");
