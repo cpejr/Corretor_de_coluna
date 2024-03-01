@@ -78,7 +78,7 @@ void MPU::printTemperature(){
 }
 
 void MPU::auto_offset(){
-  offsetPhi = (this->getAnglePhi() == 0) ? offsetPhi : (this->getAnglePhi())*(-1);
-  offsetTheta = (this->getAngleTheta() == 0) ? offsetTheta : (this->getAngleTheta())*(-1);
-  offsetPsi = (this->getAnglePsi() == 0) ? offsetPsi : (this->getAnglePsi())*(-1);
+  offsetPhi = (this->getAnglePhi() == 0) ? offsetPhi : ((this->getAnglePhi())-offsetPhi)*(-1);
+  offsetTheta = (this->getAngleTheta() == 0) ? offsetTheta : ((this->getAngleTheta())-offsetTheta)*(-1);
+  offsetPsi = (this->getAnglePsi() == 0) ? offsetPsi : ((this->getAnglePsi())-offsetPsi)*(-1);
 }

@@ -9,10 +9,10 @@
 #define CALIBRATE_BUTTON 12
 
 
-MPU Referencia(3,-53,-53,0);            // Define um objeto para um dispositivo MPU-6050 com AD0 na porta 3
-MPU MPU_L(2,35,-4,35);           // Define um objeto para um dispositivo MPU-6050 com AD0 na porta 2
-MPU MPU_R(4,36,-26,-15);           // Define um objeto para um dispositivo MPU-6050 com AD0 na porta 0
-MPU MPU_B(5,85,82,5);           // Define um objeto para um dispositivo MPU-6050 com AD0 na porta 5
+MPU Referencia(3,0,0,0);            // Define um objeto para um dispositivo MPU-6050 com AD0 na porta 3
+MPU MPU_L(2,0,0,0);           // Define um objeto para um dispositivo MPU-6050 com AD0 na porta 2
+MPU MPU_R(4,0,0,0);           // Define um objeto para um dispositivo MPU-6050 com AD0 na porta 0
+MPU MPU_B(5,0,0,0);           // Define um objeto para um dispositivo MPU-6050 com AD0 na porta 5
 
 const int TolTimes = 5;              // [Tolerância de tempo] Define o número de vezes que o dispositivo precisa detectar diferenças entre os ângulos antes de reportar um desalinhamento                                  
 const int TolGrad = 25;               // [Tolerância de ângulo] Define, em graus, a tolerância de desalinhamento entre os ângulos dos diferentes acelerômetros
@@ -40,6 +40,7 @@ void setup() {
   pinMode(9, OUTPUT);
   pinMode(8, OUTPUT);
   pinMode(7, OUTPUT);
+  pinMode(CALIBRATE_BUTTON, INPUT_PULLUP);
   // ResetTimer.start();
 }
 
@@ -47,27 +48,30 @@ void loop() {
 
   if (!digitalRead(CALIBRATE_BUTTON))
   {
+    //delay(300);
     Referencia.auto_offset();
     MPU_L.auto_offset();
     MPU_R.auto_offset();
     MPU_B.auto_offset();
+    Serial.println("Pressed!");
+    delay(300);
   }
 
   if(RightC.unaligned()){
     digitalWrite(RIGHT, HIGH);
-    // Serial.println("Desalinhamento no lado direito");
+    Serial.println("Desalinhamento no lado direito");
     timerR.start();
   }
 
   if(LeftC.unaligned()){
     digitalWrite(LEFT, HIGH);
-    // Serial.println("Desalinhamento no lado esquerdo");
+    Serial.println("Desalinhamento no lado esquerdo");
     timerL.start();
   }
 
   if(BottomC.unaligned()){
     digitalWrite(BOTTOM, HIGH);
-    // Serial.println("Desalinhamento embaixo");
+    Serial.println("Desalinhamento embaixo");
     timerB.start();
   }
 
@@ -99,14 +103,17 @@ void loop() {
   //   ResetTimer.start();
   //   Serial.println("Reset");
   // }
-  // delay(2000);
+  //delay(500);
 
 Serial.println("Referencia:");
 Referencia.printAngles();
+//delay(500);
 Serial.println("Left");
 MPU_L.printAngles();
+// delay(500);
 Serial.println("Right");
 MPU_R.printAngles(); 
+//delay(500);
 Serial.println("Bottom"); 
 MPU_B.printAngles();
 

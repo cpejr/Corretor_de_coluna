@@ -3,13 +3,14 @@
 Compare::Compare(MPU& Ref_, MPU& Point_,int ToleranceTimes_, int ToleranceAngle_):Point(Point_),Ref(Ref_),ToleranceTimes(ToleranceTimes_),ToleranceAngle(ToleranceAngle_){}
 
 bool Compare::unaligned(){
-    if (((Ref.getAnglePhi())>((Point.getAnglePhi())+ToleranceAngle)) || ((Ref.getAnglePhi())<((Point.getAnglePhi())-ToleranceAngle))){
+  
+    if ((abs(Ref.getAnglePhi() - Point.getAnglePhi()))>ToleranceAngle){
     DPhi++;
   }
-  if (((Ref.getAngleTheta())>((Point.getAngleTheta())+ToleranceAngle)) || ((Ref.getAngleTheta())<((Point.getAngleTheta())-ToleranceAngle))){
+  if ((abs(Ref.getAngleTheta() - Point.getAngleTheta()))>ToleranceAngle){
     DTheta++;
   }
-  if (((Ref.getAnglePsi())>((Point.getAnglePsi())+ToleranceAngle)) || ((Ref.getAnglePsi())<((Point.getAnglePsi())-ToleranceAngle))){
+  if ((abs(Ref.getAnglePsi() - Point.getAnglePsi()))>ToleranceAngle){
     DPsi++;
   }
 
