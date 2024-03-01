@@ -17,13 +17,13 @@ bool Compare::misaligned(){
   int currentTheta = Point.getAngleTheta() - Ref.getAngleTheta();
   int currentPsi = Point.getAnglePsi() - Ref.getAnglePsi();
 
-  if ((currentPhi - referencePhi) > ToleranceAngle || (currentPhi - referencePhi) < ToleranceAngle){
+  if ((currentPhi) > ToleranceAngle || (currentPhi) < ToleranceAngle){
     DPhi++;
   }
-  if ((currentTheta - referenceTheta) > ToleranceAngle || (currentTheta - referenceTheta) < ToleranceAngle){
+  if ((currentTheta) > ToleranceAngle || (currentTheta) < ToleranceAngle){
     DTheta++;
   }
-  if ((currentPsi - referencePsi) > ToleranceAngle || (currentPsi - referencePsi) < ToleranceAngle){
+  if ((currentPsi) > ToleranceAngle || (currentPsi) < ToleranceAngle){
     DPsi++;
   }
 
